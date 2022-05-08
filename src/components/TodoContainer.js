@@ -1,69 +1,66 @@
-import { useEffect, useState } from "react";
-import Todo from "./Todo";
+import { useEffect, useReducer, useState } from "react";
+
 import TodoInput from "./TodoInput";
 import TodoList from "./TodoList";
 
+//  adding delete func 
+// adding eddit func
+// adding check button
+// beautifing the App
+// finding a solution for backend
+const DISPATCH_COMMANDS = {
+    GET_INPUT: 'GET_INPUT',
 
-const TodoContainer = () => {
-    const [todos, setTodos] = useState([])
-    // give each one a unoqe Id?
-
-
-
-    // useEffect(() => {
-    //     // const tempTodo = JSON.parse(JSON.stringify(todos));
-    //     // // const idGen=()=>
-
-    //     // console.log(tempTodo, '1111');
-    //     // if (tempTodo.lenght === 1) { let x = { Text: tempTodo[0], isDone: false, Id: 1 }; tempTodo[0] = x }
-    //     // console.log(tempTodo, '222');
-
-    // }, [todos])
-    // get some text
-    // get the txt into an object 
-    // put object into aan array of todos
-
+}
+const reducer = (state, action) => {
     const keyGen = (prevkey = 0) => prevkey + 1;
 
     const todoGen = function (todoText) {
 
         return {
             todoText: todoText,
-            key: keyGen(todos[todos.length - 1]?.key),
+            key: keyGen(state[state.length - 1]?.key),
             isDone: false
         }
     }
-
-    const todoInputGetter = todoEvent => {
-        todoEvent.preventDefault()
-        if (todoEvent.target.children[0].value) {
-
-            let todoText = todoEvent.target.children[0].value
-            // let todoKey = Math.floor(Math.random() * 101);
-            // console.log(
-            //     'chained',todos[todos.length - 1]?.key, keyGen(todos[todos.length - 1]?.key))
-            // console.log('key', todoKey);
-            const objectifiedTodo = todoGen(todoText)
-
-            setTodos([...todos, objectifiedTodo])
-
-            todoEvent.target.children[0].value = '';
-
-        } else {
-            alert('give me something')
-        }
+    switch (action.func) {
 
 
+        case DISPATCH_COMMANDS.GET_INPUT:
+            action.event.preventDefault()
+            if (action.event.target.children[0].value) {
 
+                let todoText = action.event.target.children[0].value
+
+                const objectifiedTodo = todoGen(todoText)
+
+                return [...state, objectifiedTodo]
+
+
+            } else {
+                // BUUUUUUUG,  alert pops twice!
+                alert('give me something')
+                return state
+            }
+
+
+        default:
+            break;
     }
+}
+const TodoContainer = () => {
+    // const [todos, setTodos] = useState([])
+
+    const [todos, todoDispatcher] = useReducer(reducer, [])
+
     // console.log(todos, 'todooooos');
     return (
         <>
 
             <div className="todo-container">
                 <div className="todo-second-container">
-                    <TodoInput todoInputGetter={todoInputGetter} />
-                    <TodoList data={[todos, setTodos]} />
+                    <TodoInput todoInputGetter={event => todoDispatcher({ event: event, func: DISPATCH_COMMANDS.GET_INPUT })} />
+                    <TodoList data={[todos, todoDispatcher]} />
 
 
                 </div>
@@ -73,4 +70,55 @@ const TodoContainer = () => {
 }
 
 export default TodoContainer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const keyGen = (prevkey = 0) => prevkey + 1;
+
+    // const todoGen = function (todoText) {
+
+    //     return {
+    //         todoText: todoText,
+    //         key: keyGen(todos[todos.length - 1]?.key),
+    //         isDone: false
+    //     }
+    // }
+
+    // const todoInputGetter = todoEvent => {
+    //     todoEvent.preventDefault()
+    //     if (todoEvent.target.children[0].value) {
+
+    //         let todoText = todoEvent.target.children[0].value
+
+    //         const objectifiedTodo = todoGen(todoText)
+
+    //         setTodos([...todos, objectifiedTodo])
+
+    //         todoEvent.target.children[0].value = '';
+
+    //     } else {
+    //         alert('give me something')
+    //     }
+
+
+
+    // }
 

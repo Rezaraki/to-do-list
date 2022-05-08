@@ -3,8 +3,11 @@ const Todo = ({ text, keys, isdone }) => {
 
     return (
         <div key={keys}>
-            <p>{text}</p>
-            <p>{isdone}</p>
+
+            <label htmlFor="vehicle1">{text} </label>
+            <input type="checkbox" id="vehicle1" />
+            <button >delete</button>
+            <button>edit</button>
 
         </div>
     );
