@@ -10,29 +10,40 @@ import TodoList from "./TodoList";
 // finding a solution for backend
 const DISPATCH_COMMANDS = {
     GET_INPUT: 'GET_INPUT',
+    DELETE: 'DELETE'
 
 }
-const reducer = (state, action) => {
-    const keyGen = (prevkey = 0) => prevkey + 1;
+const keyGen = (prevkey = 0) => prevkey + 1;
+const todoGen = function (todoText, arrayOftodos) {
 
-    const todoGen = function (todoText) {
-
-        return {
-            todoText: todoText,
-            key: keyGen(state[state.length - 1]?.key),
-            isDone: false
-        }
+    return {
+        todoText: todoText,
+        key: keyGen(arrayOftodos[arrayOftodos.length - 1]?.key),
+        isDone: false
     }
-    switch (action.func) {
+}
 
+const reducer = (state, action) => {
+
+    switch (action.type) {
+        case DISPATCH_COMMANDS.DELETE:
+            let tempState = JSON.parse(JSON.stringify(state))
+
+            tempState.pop(tempState.findIndex(todo => todo.key === action.key))
+
+
+            return tempState;
 
         case DISPATCH_COMMANDS.GET_INPUT:
             action.event.preventDefault()
+
             if (action.event.target.children[0].value) {
 
                 let todoText = action.event.target.children[0].value
 
-                const objectifiedTodo = todoGen(todoText)
+                const objectifiedTodo = todoGen(todoText, state)
+
+                console.log(state);
 
                 return [...state, objectifiedTodo]
 
@@ -52,15 +63,15 @@ const TodoContainer = () => {
     // const [todos, setTodos] = useState([])
 
     const [todos, todoDispatcher] = useReducer(reducer, [])
-
+    // console.log(todoDispatcher);
     // console.log(todos, 'todooooos');
     return (
         <>
 
             <div className="todo-container">
                 <div className="todo-second-container">
-                    <TodoInput todoInputGetter={event => todoDispatcher({ event: event, func: DISPATCH_COMMANDS.GET_INPUT })} />
-                    <TodoList data={[todos, todoDispatcher]} />
+                    <TodoInput data={[todoDispatcher, DISPATCH_COMMANDS]} />
+                    <TodoList data={[todos, todoDispatcher, DISPATCH_COMMANDS]} />
 
 
                 </div>

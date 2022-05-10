@@ -1,14 +1,16 @@
 import Todo from "./Todo"
 
 
+// : [todos, todoDispatcher, DISPATCH_COMMANDS]
+// DISPATCH_COMMANDS={DISPATCH_COMMANDS} todoDispatcher={todoDispatcher} text={todo.todoText} keys={todo.key} key={todo.key} isdone={todo.isDone}
+const TodoList = ({ data: [todos, ...theRest] }) => {
 
-const TodoList = ({ data: [todos, setTodos] }) => {
-    console.log(todos);
     if (todos[0]) {
-        console.log(!todos[0], '!todos[0]', todos);
+
+        // console.log(!todos[0], '!todos[0]', todos);
         return (
             <div  >
-                {todos.map(todo => <Todo text={todo.todoText} keys={todo.key} key={todo.key} isdone={todo.isDone} />)}
+                {todos.map(todo => <Todo todo={todo} key={todo.key} data={theRest} />)}
             </div>
         )
     } else { return <div  > add some todos</div> }
