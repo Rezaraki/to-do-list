@@ -9,9 +9,9 @@ const TodoList = ({ data: [todos, ...theRest] }) => {
 
         // console.log(!todos[0], '!todos[0]', todos);
         return (
-            <div  >
-                {todos.map(todo => <Todo todo={todo} key={todo.key} data={theRest} />)}
-            </div>
+
+            todos.map(todo => <div key={todo.key}> <Todo todo={todo} key={todo.key} data={theRest} /></div>)
+
         )
     } else { return <div  > add some todos</div> }
 
