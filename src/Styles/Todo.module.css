@@ -1,0 +1,7 @@
+.isDone {
+  text-decoration: line-through;
+  color: rgb(175, 175, 175);
+}
+.notDone {
+  color: blue;
+}

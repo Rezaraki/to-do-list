@@ -4,14 +4,15 @@ import TodoInput from "./TodoInput";
 import TodoList from "./TodoList";
 
 //  adding delete func  ✓
-// adding eddit func
+// adding eddit func    ✓
 // adding check button
 // beautifing the App
 // finding a solution for backend
 const DISPATCH_COMMANDS = {
     GET_INPUT: 'GET_INPUT',
     DELETE: 'DELETE',
-    EDIT: 'EDIT'
+    EDIT: 'EDIT',
+    DONE: 'DONE'
 
 }
 const keyGen = (prevkey = 0) => prevkey + 1;
@@ -23,16 +24,21 @@ const todoGen = function (todoText, arrayOftodos) {
         isDone: false
     }
 }
-
+const toggler = toggleValue => !toggleValue;
 const reducer = (state, action) => {
 
     switch (action.type) {
 
+        case DISPATCH_COMMANDS.DONE:
+            const stateTemp = JSON.parse(JSON.stringify(state))
+            const indexOfCheckedTodo = stateTemp.findIndex(todo => todo.key === action.keys)
+
+            stateTemp[indexOfCheckedTodo].isDone = toggler(stateTemp[indexOfCheckedTodo].isDone)
+
+            return stateTemp;
         case DISPATCH_COMMANDS.EDIT:
             action.event.preventDefault();
 
-            // do the job without mutating the state
-            // const tempState= 
             const temporaryState = [...state]
             const newText = action.event.target.children[0].value;
             const indexOfEditedTodo = temporaryState.findIndex(todo => todo.key === action.keys)

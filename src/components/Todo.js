@@ -2,11 +2,12 @@
 
 import { useRef, useState } from "react";
 import Button from "./Button";
-
+import styles from "../Styles/Todo.module.css";
 const Todo = ({ data: [todoDispatcher, DISPATCH_COMMANDS], todo: { todoText, key, isDone } }) => {
 
     // const todoTextField = useRef()
     const [editToggle, setEditToggle] = useState(true)
+
 
     const submitFunc = e => {
         todoDispatcher({ type: DISPATCH_COMMANDS.EDIT, keys: key, event: e })
@@ -16,13 +17,14 @@ const Todo = ({ data: [todoDispatcher, DISPATCH_COMMANDS], todo: { todoText, key
     return (
 
         <div key={key}>
-
-            {editToggle ? <p>{todoText}</p> : <form onSubmit={e => submitFunc(e)}>
+            {/* show todo text, when edit clicked show input for changing the todotext */}
+            {/* add a condition to show the txt linedthorough when isDone is true  */}
+            {editToggle ? <span className={isDone ? styles.isDone : styles.notDone}>{todoText}</span> : <form onSubmit={e => submitFunc(e)}>
                 <input type="text" className="edit-input" /> <button>submit</button>
             </form>
             }
 
-            <input type="checkbox" id={`checkbox-${key}`} />
+            <input type='checkbox' key={`checkbox${key}`} onClick={e => todoDispatcher({ type: DISPATCH_COMMANDS.DONE, keys: key, event: e })} />
             <Button text='delete' key={'delete' + key} func={todoDispatcher} payload={{ keys: key, type: DISPATCH_COMMANDS.DELETE }} />
 
             <Button text='edit' key={'edit' + key} func={() => setEditToggle(false)} payload={true} />
@@ -30,7 +32,7 @@ const Todo = ({ data: [todoDispatcher, DISPATCH_COMMANDS], todo: { todoText, key
 
 
 
-        </div>
+        </div >
     );
 }
 
