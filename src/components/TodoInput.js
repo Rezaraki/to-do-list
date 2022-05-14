@@ -1,11 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
+import TodoContext from "../contexts/TodoContexts";
 
 
-const TodoInput = ({ data: [todoDispatcher, DISPATCH_COMMANDS] }) => {
+const TodoInput = () => {
 
-    console.log();
+    const [_, todoDispatcher, DISPATCH_COMMANDS] = useContext(TodoContext)
 
-    // console.log(todoInputGetter, DISPATCH_COMMANDS);
     const inputRef = useRef()
 
     useEffect(() => {

@@ -1,8 +1,7 @@
 // : [text, keys, isdone, todoDispatcher, DISPATCH_COMMANDS]
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Button from "./Button";
-import styles from "../Styles/Todo.module.css";
 const Todo = ({ data: [todoDispatcher, DISPATCH_COMMANDS], todo: { todoText, key, isDone } }) => {
 
     // const todoTextField = useRef()
@@ -19,7 +18,7 @@ const Todo = ({ data: [todoDispatcher, DISPATCH_COMMANDS], todo: { todoText, key
         <div key={key}>
             {/* show todo text, when edit clicked show input for changing the todotext */}
             {/* add a condition to show the txt linedthorough when isDone is true  */}
-            {editToggle ? <span className={isDone ? styles.isDone : styles.notDone}>{todoText}</span> : <form onSubmit={e => submitFunc(e)}>
+            {editToggle ? <span className={isDone ? 'text-gray-500 line-through' : undefined}>{todoText} </span> : <form onSubmit={e => submitFunc(e)}>
                 <input type="text" className="edit-input" /> <button>submit</button>
             </form>
             }

@@ -1,19 +1,31 @@
+import { useContext } from "react"
+import FeaturesContetxt from "../contexts/FeaturesContetxt"
+import TodoContext from "../contexts/TodoContexts"
 import Todo from "./Todo"
 
 
-// : [todos, todoDispatcher, DISPATCH_COMMANDS]
-// DISPATCH_COMMANDS={DISPATCH_COMMANDS} todoDispatcher={todoDispatcher} text={todo.todoText} keys={todo.key} key={todo.key} isdone={todo.isDone}
-const TodoList = ({ data: [todos, ...theRest] }) => {
+const TodoList = () => {
+    const [todos, ...theRest] = useContext(TodoContext)
+    const [FeaturesData, featuresDispatcher, FEATURE_COMMANDS] = useContext(FeaturesContetxt)
+    console.log(todos, FeaturesData);
+    const mapFunc = todos => todos.map(todo => <div key={todo.key}> <Todo todo={todo} key={todo.key} data={theRest} /></div>)
+
 
     if (todos[0]) {
 
-        // console.log(!todos[0], '!todos[0]', todos);
-        return (
+        if (FeaturesData.onlyOngoing) {
+            const onlyOngoingTodos = todos.filter(todo => todo.isDone === false)
 
-            todos.map(todo => <div key={todo.key}> <Todo todo={todo} key={todo.key} data={theRest} /></div>)
+            return mapFunc(onlyOngoingTodos)
 
-        )
-    } else { return <div  > add some todos</div> }
+        } if (!FeaturesData.onlyOngoing) {
+
+            return mapFunc(todos)
+        }
+    }
+    else { return <div  > add some todos</div> }
+
+
 
 }
 

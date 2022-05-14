@@ -1,11 +1,16 @@
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useReducer, useState } from "react";
+import FeaturesContetxt from "../contexts/FeaturesContetxt";
+import TodoContext from "../contexts/TodoContexts";
+import FeaturesBar from "./FeaturesBar";
 
 import TodoInput from "./TodoInput";
 import TodoList from "./TodoList";
 
 //  adding delete func  ✓
 // adding eddit func    ✓
-// adding check button
+// adding check button  ✓
+// use constext         ✓
+// adding filter by done or not 
 // beautifing the App
 // finding a solution for backend
 const DISPATCH_COMMANDS = {
@@ -24,7 +29,7 @@ const todoGen = function (todoText, arrayOftodos) {
         isDone: false
     }
 }
-const toggler = toggleValue => !toggleValue;
+const toggler = toggleValue => toggleValue ^= true;;
 const reducer = (state, action) => {
 
     switch (action.type) {
@@ -76,15 +81,45 @@ const reducer = (state, action) => {
             break;
     }
 }
-const TodoContainer = () => {
+const FEATURE_COMMANDS = {
+    SEARCH: 'SEARCH',
+    JUST_ON_GOING: 'JUST_ON_GOING',
 
+}
+const featuresReducer = (featureState, featureAction) => {
+    switch (featureAction.type) {
+        case FEATURE_COMMANDS.SEARCH:
+
+            return featureState
+
+        case FEATURE_COMMANDS.JUST_ON_GOING:
+            const tempfeatureState = { ...featureState }
+
+            tempfeatureState.onlyOngoing ^= true;
+
+
+            return tempfeatureState
+
+
+        default: return featureState
+    }
+}
+const TodoContainer = () => {
     const [todos, todoDispatcher] = useReducer(reducer, [])
+    const [FeaturesData, featuresDispatcher] = useReducer(featuresReducer, { onlyOngoing: false })
+
 
     return (
         <div className="todo-container">
             <div className="todo-second-container">
-                <TodoInput data={[todoDispatcher, DISPATCH_COMMANDS]} />
-                <TodoList data={[todos, todoDispatcher, DISPATCH_COMMANDS]} />
+                <TodoContext.Provider value={[todos, todoDispatcher, DISPATCH_COMMANDS]}>
+                    <FeaturesContetxt.Provider value={[FeaturesData, featuresDispatcher, FEATURE_COMMANDS]}>
+                        <TodoInput />
+                        <FeaturesBar />
+                        <TodoList />
+                    </FeaturesContetxt.Provider>
+                </TodoContext.Provider>
+
             </div>
         </div>
     );
