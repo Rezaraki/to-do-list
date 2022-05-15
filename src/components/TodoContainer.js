@@ -24,14 +24,14 @@ const DISPATCH_COMMANDS = {
 }
 const keyGen = (prevkey = 0) => prevkey + 1;
 const todoGen = function (todoText, arrayOftodos) {
-
-    return {
+    const todoObj = {
         todoText: todoText,
         key: keyGen(arrayOftodos[arrayOftodos.length - 1]?.key),
         isDone: false,
-        dateCreated: new Date(),
-
+        dateCreated: Date.now(),
     }
+    todoObj.dateModified = todoObj.dateCreated
+    return todoObj
 }
 const toggler = toggleValue => toggleValue ^= true;;
 const reducer = (state, action) => {
@@ -53,6 +53,7 @@ const reducer = (state, action) => {
             const indexOfEditedTodo = temporaryState.findIndex(todo => todo.key === action.keys)
 
             temporaryState[indexOfEditedTodo].todoText = newText;
+            temporaryState[indexOfEditedTodo].dateModified = Date.now();
 
             return temporaryState
 
@@ -89,6 +90,7 @@ const FEATURE_COMMANDS = {
     SEARCH: 'SEARCH',
     JUST_ON_GOING: 'JUST_ON_GOING',
     SORT_DATE_CREATED: 'SORT_DATE_CREATED',
+    SORT_DATE_MODIFIED: 'SORT_DATE_MODIFIED',
     DESCENDING: 'DESCENDING',
     ASCENDING: 'ASCENDING'
 
@@ -98,9 +100,13 @@ const initialFeaturesObj = {
     onlyOngoing: false,
     searchValue: '',
     dateCreatedToggle: FEATURE_COMMANDS.DESCENDING,
+    dateModifiedToggle: ''
+
 }
 const featuresReducer = (featureState, featureAction) => {
+    const sortToggleOptions = [FEATURE_COMMANDS.DESCENDING, FEATURE_COMMANDS.ASCENDING]
     switch (featureAction.type) {
+
         case FEATURE_COMMANDS.SEARCH:
             featureAction.event.preventDefault();
             let searchText = featureAction.event.target.children[1].value
@@ -114,11 +120,18 @@ const featuresReducer = (featureState, featureAction) => {
             return tempfeatureState
 
         case FEATURE_COMMANDS.SORT_DATE_CREATED:
+
             console.log('featureState', featureState)
-            const sortToggleOptions = [FEATURE_COMMANDS.DESCENDING, FEATURE_COMMANDS.ASCENDING, false]
-            const currentSortModeIndex = sortToggleOptions.indexOf(featureState.dateCreatedToggle)
-            const newSortModeIndex = (currentSortModeIndex === 2) ? 0 : +currentSortModeIndex + 1
-            return { ...featureState, dateCreatedToggle: sortToggleOptions[newSortModeIndex] }
+            const currentCreatedSortModeIndex = sortToggleOptions.indexOf(featureState.dateCreatedToggle)
+            const newSortModeIndex = (currentCreatedSortModeIndex !== 1) ? 1 : 0
+            return { ...featureState, dateModifiedToggle: '', dateCreatedToggle: sortToggleOptions[newSortModeIndex] }
+
+        case FEATURE_COMMANDS.SORT_DATE_MODIFIED:
+
+            const currentModifiedSortModeIndex = sortToggleOptions.indexOf(featureState.dateModifiedToggle)
+            const newModifiedSortModeIndex = (currentModifiedSortModeIndex === 1) ? 0 : 1
+
+            return { ...featureState, dateCreatedToggle: '', dateModifiedToggle: sortToggleOptions[newModifiedSortModeIndex] }
 
         default: return featureState
     }

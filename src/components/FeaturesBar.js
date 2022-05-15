@@ -27,8 +27,8 @@ const FeaturesBar = () => {
         </div>
         {/* sort*/}
         <div>
-            <button onClick={() => featuresDispatcher({ type: FEATURE_COMMANDS.SORT_DATE_CREATED })}>sort by date dateCreated ▲▼</button><br />
-
+            <button onClick={() => featuresDispatcher({ type: FEATURE_COMMANDS.SORT_DATE_CREATED })}>sort by date date Created ▲▼</button><br />
+            <button onClick={() => featuresDispatcher({ type: FEATURE_COMMANDS.SORT_DATE_MODIFIED })}>sort by date date Modified ▲▼</button>
             {/* <button>sort by date dateModified ▲▼</button> */}
         </div>
     </div >);

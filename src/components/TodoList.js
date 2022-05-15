@@ -30,6 +30,7 @@ const TodoList = () => {
 
         }
         // Sort 
+        // by dateCreated === key
         if (FeaturesData.dateCreatedToggle === FEATURE_COMMANDS.DESCENDING) {
             const tempTodosToShow = JSON.parse(JSON.stringify(todosToShow))
             const descendingTodos = tempTodosToShow.sort((a, b) => a.key - b.key)
@@ -40,7 +41,18 @@ const TodoList = () => {
             const tempTodosToShow = JSON.parse(JSON.stringify(todosToShow))
             const ascendingTodos = tempTodosToShow.sort((a, b) => b.key - a.key)
             todosToShow = ascendingTodos
-
+        }
+        // by dateModified
+        if (FeaturesData.dateModifiedToggle === FEATURE_COMMANDS.DESCENDING) {
+            const tempTodosToShow = JSON.parse(JSON.stringify(todosToShow))
+            const descendingTodos = tempTodosToShow.sort((a, b) => a.dateModified - b.dateModified)
+            console.log('descendingTodos', descendingTodos)
+            todosToShow = descendingTodos
+        }
+        if (FeaturesData.dateModifiedToggle === FEATURE_COMMANDS.ASCENDING) {
+            const tempTodosToShow = JSON.parse(JSON.stringify(todosToShow))
+            const ascendingTodos = tempTodosToShow.sort((a, b) => b.dateModified - a.dateModified)
+            todosToShow = ascendingTodos
         }
 
         return mapFunc(todosToShow)
