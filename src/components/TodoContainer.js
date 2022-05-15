@@ -6,11 +6,13 @@ import FeaturesBar from "./FeaturesBar";
 import TodoInput from "./TodoInput";
 import TodoList from "./TodoList";
 
-//  adding delete func  ✓
-// adding eddit func    ✓
-// adding check button  ✓
-// use constext         ✓
-// adding filter by done or not 
+//  adding delete func              ✓
+// adding eddit func                ✓
+// adding check button              ✓
+// use constext                     ✓              
+// adding filter by done or not     ✓
+// adding search                    ✓  
+// sort 😭
 // beautifing the App
 // finding a solution for backend
 const DISPATCH_COMMANDS = {
@@ -26,7 +28,9 @@ const todoGen = function (todoText, arrayOftodos) {
     return {
         todoText: todoText,
         key: keyGen(arrayOftodos[arrayOftodos.length - 1]?.key),
-        isDone: false
+        isDone: false,
+        dateCreated: new Date(),
+
     }
 }
 const toggler = toggleValue => toggleValue ^= true;;
@@ -50,7 +54,7 @@ const reducer = (state, action) => {
 
             temporaryState[indexOfEditedTodo].todoText = newText;
 
-            return temporaryState;
+            return temporaryState
 
         case DISPATCH_COMMANDS.DELETE:
             const tempState = state.filter(todo => todo.key !== action.keys)
@@ -84,41 +88,58 @@ const reducer = (state, action) => {
 const FEATURE_COMMANDS = {
     SEARCH: 'SEARCH',
     JUST_ON_GOING: 'JUST_ON_GOING',
+    SORT_DATE_CREATED: 'SORT_DATE_CREATED',
+    DESCENDING: 'DESCENDING',
+    ASCENDING: 'ASCENDING'
 
+
+}
+const initialFeaturesObj = {
+    onlyOngoing: false,
+    searchValue: '',
+    dateCreatedToggle: FEATURE_COMMANDS.DESCENDING,
 }
 const featuresReducer = (featureState, featureAction) => {
     switch (featureAction.type) {
         case FEATURE_COMMANDS.SEARCH:
-
+            featureAction.event.preventDefault();
+            let searchText = featureAction.event.target.children[1].value
+            if (searchText) return { ...featureState, searchValue: searchText }
             return featureState
+
 
         case FEATURE_COMMANDS.JUST_ON_GOING:
             const tempfeatureState = { ...featureState }
-
             tempfeatureState.onlyOngoing ^= true;
-
-
             return tempfeatureState
 
+        case FEATURE_COMMANDS.SORT_DATE_CREATED:
+            console.log('featureState', featureState)
+            const sortToggleOptions = [FEATURE_COMMANDS.DESCENDING, FEATURE_COMMANDS.ASCENDING, false]
+            const currentSortModeIndex = sortToggleOptions.indexOf(featureState.dateCreatedToggle)
+            const newSortModeIndex = (currentSortModeIndex === 2) ? 0 : +currentSortModeIndex + 1
+            return { ...featureState, dateCreatedToggle: sortToggleOptions[newSortModeIndex] }
 
         default: return featureState
     }
 }
+
+
 const TodoContainer = () => {
     const [todos, todoDispatcher] = useReducer(reducer, [])
-    const [FeaturesData, featuresDispatcher] = useReducer(featuresReducer, { onlyOngoing: false })
+    const [FeaturesData, featuresDispatcher] = useReducer(featuresReducer, initialFeaturesObj)
 
 
     return (
         <div className="todo-container">
             <div className="todo-second-container">
-                <TodoContext.Provider value={[todos, todoDispatcher, DISPATCH_COMMANDS]}>
-                    <FeaturesContetxt.Provider value={[FeaturesData, featuresDispatcher, FEATURE_COMMANDS]}>
+                <FeaturesContetxt.Provider value={[FeaturesData, featuresDispatcher, FEATURE_COMMANDS]}>
+                    <TodoContext.Provider value={[todos, todoDispatcher, DISPATCH_COMMANDS]}>
                         <TodoInput />
                         <FeaturesBar />
                         <TodoList />
-                    </FeaturesContetxt.Provider>
-                </TodoContext.Provider>
+                    </TodoContext.Provider>
+                </FeaturesContetxt.Provider>
 
             </div>
         </div>
