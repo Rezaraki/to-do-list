@@ -1,6 +1,6 @@
-const Button = ({ text, func, payload }) => {
+const Button = ({ text, func, payload, styles }) => {
     return (
-        <button onClick={() => { return func(payload) }} >{text}</button>
+        <button className={styles} onClick={() => { return func(payload) }} >{text}</button>
     );
 }
 

@@ -12,8 +12,8 @@ import TodoList from "./TodoList";
 // use constext                     ✓              
 // adding filter by done or not     ✓
 // adding search                    ✓  
-// sort 😭
-// beautifing the App
+// sort                             ✓
+// beautifing the App               ✓
 // finding a solution for backend
 const DISPATCH_COMMANDS = {
     GET_INPUT: 'GET_INPUT',
@@ -110,8 +110,9 @@ const featuresReducer = (featureState, featureAction) => {
         case FEATURE_COMMANDS.SEARCH:
             featureAction.event.preventDefault();
             let searchText = featureAction.event.target.children[1].value
-            if (searchText) return { ...featureState, searchValue: searchText }
+            if (searchText) { return { ...featureState, searchValue: searchText } }
             return featureState
+
 
 
         case FEATURE_COMMANDS.JUST_ON_GOING:
@@ -144,12 +145,12 @@ const TodoContainer = () => {
 
 
     return (
-        <div className="todo-container">
-            <div className="todo-second-container">
+        <div className="w-full flex justify-center  ">
+            <div className="w-2/5 bg-white mt-8 rounded-2xl drop-shadow-md px-2 ">
                 <FeaturesContetxt.Provider value={[FeaturesData, featuresDispatcher, FEATURE_COMMANDS]}>
                     <TodoContext.Provider value={[todos, todoDispatcher, DISPATCH_COMMANDS]}>
                         <TodoInput />
-                        <FeaturesBar />
+                        {todos[0] ? <FeaturesBar /> : undefined}
                         <TodoList />
                     </TodoContext.Provider>
                 </FeaturesContetxt.Provider>

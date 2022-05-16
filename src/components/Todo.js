@@ -15,19 +15,25 @@ const Todo = ({ data: [todoDispatcher, DISPATCH_COMMANDS], todo: { todoText, key
 
     return (
 
-        <div key={key}>
+        <div key={key} className='w-full border-2 flex justify-between my-2 p-4 rounded-md '>
             {/* show todo text, when edit clicked show input for changing the todotext */}
+            <div className="flex-grow-0 ">
+                {/* todo text */}
+                {editToggle ? <p className={` inline-block break-all ${isDone ? 'text-gray-500 line-through' : undefined}`}>{todoText} </p> : <form onSubmit={e => submitFunc(e)}>
+                    <input type="text" className="edit-input" /> <button>submit</button>
+                </form>
+                }
+            </div>
+            {/* done, edit, delete */}
+            <div className="flex-shrink-0">
+                <input type='checkbox' className='align-middle' key={`checkbox${key}`} onClick={e => todoDispatcher({ type: DISPATCH_COMMANDS.DONE, keys: key, event: e })} />
+                {/* edit */}
+                <Button text='edit' key={'edit' + key} func={() => setEditToggle(false)} payload={true} styles={'mx-2'} />
+                {/* delete */}
+                <Button text='delete' key={'delete' + key} func={todoDispatcher} payload={{ keys: key, type: DISPATCH_COMMANDS.DELETE }} />
 
-            {editToggle ? <span className={isDone ? 'text-gray-500 line-through' : undefined}>{todoText} </span> : <form onSubmit={e => submitFunc(e)}>
-                <input type="text" className="edit-input" /> <button>submit</button>
-            </form>
-            }
 
-            <input type='checkbox' key={`checkbox${key}`} onClick={e => todoDispatcher({ type: DISPATCH_COMMANDS.DONE, keys: key, event: e })} />
-            <Button text='delete' key={'delete' + key} func={todoDispatcher} payload={{ keys: key, type: DISPATCH_COMMANDS.DELETE }} />
-
-            <Button text='edit' key={'edit' + key} func={() => setEditToggle(false)} payload={true} />
-
+            </div>
 
 
 
