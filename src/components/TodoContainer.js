@@ -146,7 +146,7 @@ const TodoContainer = () => {
 
     return (
         <div className="w-full flex justify-center  ">
-            <div className="w-2/5 bg-white mt-8 rounded-2xl drop-shadow-md px-2 ">
+            <div className="w-11/12 lg:w-2/5 bg-white mt-8 rounded-2xl drop-shadow-md px-2 ">
                 <FeaturesContetxt.Provider value={[FeaturesData, featuresDispatcher, FEATURE_COMMANDS]}>
                     <TodoContext.Provider value={[todos, todoDispatcher, DISPATCH_COMMANDS]}>
                         <TodoInput />
